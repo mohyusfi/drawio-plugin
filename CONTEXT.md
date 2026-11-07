@@ -16,6 +16,10 @@ _Avoid_: Sync engine, host API
 The pre-packaged collection of offline XML stylesheets, UI stencils, and localization text loaded by the editor at runtime.
 _Avoid_: Asset pack, locale pack
 
+**Sync Debounce**:
+The brief delay (~200ms) that coalesces rapid canvas edits before sending an update to the Orca document buffer.
+_Avoid_: Save throttle, batch timer
+
 **Diagram Model**:
 The in-memory and serialized XML graph representation (`mxGraphModel` / `mxfile`) of the active drawing.
 _Avoid_: Canvas data, project file
