@@ -34,7 +34,7 @@ const shapes = read('js/shapes-14-6-5.min.js')
 // Upstream uses relative image names in constructors and CSS. Embed those assets.
 app = app.replace(/(['"])((?:images|img|mxgraph\/images)\/[^'"\s]+)\1/g, (all,q,p) => asset(p) ? q + asset(p) + q : all)
 new vm.Script([app,shapes,stencils].join('\n;\n'))
-const resources = Object.fromEntries(['resources/dia.txt','resources/dia_zh.txt','styles/default.xml','styles/dark-default.xml'].map(p => [p,read(p)]))
+const resources = Object.fromEntries(['resources/dia.txt','styles/default.xml','styles/dark-default.xml'].map(p => [p,read(p)]))
 let css = ['styles/grapheditor.css','mxgraph/css/common.css'].map(p => read(p).replace(/url\(['"]?([^)'"\s]+)['"]?\)/g, (all,path) => {
   const a = asset(resolve(web,dirname(p),path).slice(web.length+1))
   return a ? `url("${a}")` : all
@@ -51,7 +51,7 @@ mkdirSync(vendorDir,{recursive:true})
 rmSync(imageDir,{recursive:true,force:true})
 mkdirSync(imageDir,{recursive:true})
 writeFileSync(resolve(imageDir,'github-logo.svg'),readFileSync(resolve(web,'images/github-logo.svg')))
-const html = `<meta charset="utf-8"><link rel="stylesheet" href="styles.css"><style>html,body{height:100%;margin:0;overflow:hidden}#message{position:fixed;inset:0;display:grid;place-content:center;background:var(--orca-background,#fff);color:var(--orca-foreground,#222);font:14px system-ui;z-index:99999;padding:32px;white-space:pre-wrap}#message[hidden]{display:none}</style><div id="message" role="status">正在加载 draw.io…</div><script src="bootstrap.js"></script><script src="resources.js"></script><script src="vendor/app.min.js"></script><script src="vendor/shapes.min.js"></script><script src="vendor/stencils.min.js"></script><script src="editor.js"></script>`
+const html = `<meta charset="utf-8"><link rel="stylesheet" href="styles.css"><style>html,body{height:100%;margin:0;overflow:hidden}#message{position:fixed;inset:0;display:grid;place-content:center;background:var(--orca-background,#fff);color:var(--orca-foreground,#222);font:14px system-ui;z-index:99999;padding:32px;white-space:pre-wrap}#message[hidden]{display:none}</style><div id="message" role="status">Loading draw.io…</div><script src="bootstrap.js"></script><script src="resources.js"></script><script src="vendor/app.min.js"></script><script src="vendor/shapes.min.js"></script><script src="vendor/stencils.min.js"></script><script src="editor.js"></script>`
 if (Buffer.byteLength(html)>10*1024*1024) throw Error('Editor exceeds Orca entry limit')
 writeFileSync(resolve(editorDir,'index.html'),html)
 writeFileSync(resolve(editorDir,'bootstrap.js'),boot)

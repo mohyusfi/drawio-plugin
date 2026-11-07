@@ -5,7 +5,7 @@
   "name": "Draw.io",
   "version": "0.1.5",
   "execution": "sandboxed-ui",
-  "description": "在 Orca 中离线创建和编辑 draw.io 流程图、架构图及多页图表。",
+  "description": "Create and edit draw.io flowcharts, architecture diagrams, and multi-page drawings offline in Orca.",
   "license": "Apache-2.0",
   "engines": {
     "orca": ">=1.4.248"
@@ -28,7 +28,7 @@
     "newFiles": [
       {
         "id": "drawing",
-        "title": "新建 Draw.io 图表",
+        "title": "New Draw.io Diagram",
         "extension": ".drawio",
         "template": "templates/empty.drawio",
         "icon": "images/tab-icon.png"
@@ -39,23 +39,23 @@
   "icon": "images/icon.png",
   "cover": {
     "path": "images/cover.webp",
-    "alt": "深蓝色背景中的橙色与青色流程图卡片，标题 Draw.io by LinDoo"
+    "alt": "Orange and cyan flowchart cards on dark blue background, titled Draw.io by LinDoo"
   },
   "screenshots": [
     {
       "path": "images/editing-light.png",
-      "alt": "浅色主题的 draw.io 编辑器，展示中文离线图表工作流和常用图形库",
-      "caption": "浅色主题 · 离线图表编辑"
+      "alt": "Draw.io editor in light theme showing offline diagram workflow and common shapes",
+      "caption": "Light Theme · Offline Diagram Editing"
     },
     {
       "path": "images/editing-dark.png",
-      "alt": "深色主题的 draw.io 编辑器，展示相同的流程图和页面设置",
-      "caption": "跟随 Orca 深色主题"
+      "alt": "Draw.io editor in dark theme showing the same diagram and page setup",
+      "caption": "Follows Orca Dark Theme"
     },
     {
       "path": "images/editing-selection.png",
-      "alt": "选中流程图节点后的 draw.io 编辑器，右侧展示节点样式选项",
-      "caption": "图形选择与样式编辑"
+      "alt": "Draw.io editor with a flowchart node selected showing styling options on the right",
+      "caption": "Shape Selection & Style Editing"
     }
   ]
 }
