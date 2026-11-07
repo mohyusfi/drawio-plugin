@@ -1,9 +1,9 @@
 // The host has an opaque origin and denies storage/network APIs.
-window.urlParams = {offline:'1',local:'1',embed:'0',gapi:'0',gh:'0',gl:'0',od:'0',tr:'0',browser:'0',math:'0',plugins:'0',lang:'zh',ui:'kennedy',stealth:'1',noExitBtn:'1',noSaveBtn:'1'};
+window.urlParams = {offline:'1',local:'1',embed:'0',gapi:'0',gh:'0',gl:'0',od:'0',tr:'0',browser:'0',math:'0',plugins:'0',lang:'en',ui:'kennedy',stealth:'1',noExitBtn:'1',noSaveBtn:'1'};
 window.mxLoadResources = false;
 window.mxLoadStylesheets = false;
-window.mxLanguage = 'zh';
-window.mxLanguages = ['zh'];
+window.mxLanguage = 'en';
+window.mxLanguages = ['en'];
 window.mxIsElectron = false;
 window.isLocalStorage = false;
 window.EXPORT_URL = null;

@@ -1,14 +1,21 @@
 // Exercise the real upstream editor inside Orca's isolated-frame CSP sandbox.
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { readFileSync, existsSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { resolve, extname } from 'node:path'
-const require = createRequire(resolve(process.env.ORCA_DIR || '/data/LinDoo/orca','package.json'))
-const { chromium } = require('playwright')
+let chromium
+try {
+  const require = createRequire(resolve(process.env.ORCA_DIR || '/data/LinDoo/orca','package.json'))
+  chromium = require('playwright').chromium
+} catch {
+  const require = createRequire(import.meta.url)
+  chromium = require('playwright').chromium
+}
 const editorRoot=new URL('../../editor/',import.meta.url)
 const html=readFileSync(new URL('index.html',editorRoot),'utf8')
 const template=readFileSync(new URL('../../templates/empty.drawio',import.meta.url),'utf8')
-const browser=await chromium.launch({headless:true,args:['--no-sandbox']})
+const chromePath = process.env.CHROME_BIN || (existsSync('/bin/google-chrome') ? '/bin/google-chrome' : undefined)
+const browser=await chromium.launch({headless:true,executablePath:chromePath,args:['--no-sandbox']})
 try {
   const page=await browser.newPage({viewport:{width:1440,height:1000}})
   const errors=[]
@@ -56,17 +63,17 @@ try {
   await frame.evaluate(template=>{current={version:5,readOnly:false,content:{kind:'text',text:template}};receive(current);edits.length=0},template)
   await frame.evaluate(async()=>{
     const g=drawioUi.editor.graph;
-    g.insertVertex(g.getDefaultParent(),'test-cell','你好 Draw.io',80,80,180,60);
+    g.insertVertex(g.getDefaultParent(),'test-cell','Hello Draw.io',80,80,180,60);
     await flush();
   })
   assert.equal(await frame.evaluate(()=>edits.length),1)
-  assert.match(await frame.evaluate(()=>current.content.text),/你好 Draw.io/)
+  assert.match(await frame.evaluate(()=>current.content.text),/Hello Draw.io/)
   await frame.evaluate(()=>flush())
   assert.equal(await frame.evaluate(()=>edits.length),1,'unchanged save must not create edits')
   await frame.evaluate(async()=>{drawioUi.editor.undoManager.undo();await flush()})
   assert.equal(await frame.evaluate(()=>drawioUi.editor.graph.model.getCell('test-cell')==null),true)
   await frame.evaluate(async()=>{drawioUi.editor.undoManager.redo();await flush()})
-  assert.equal(await frame.evaluate(()=>drawioUi.editor.graph.model.getCell('test-cell').value),'你好 Draw.io')
+  assert.equal(await frame.evaluate(()=>drawioUi.editor.graph.model.getCell('test-cell').value),'Hello Draw.io')
   await frame.evaluate(async()=>{drawioUi.setBackgroundColor('#ffcccc');await flush()})
   assert.match(await frame.evaluate(()=>current.content.text),/#ffcccc/)
   // Compressed multi-page diagrams must retain both pages and their identifiers.
@@ -105,7 +112,7 @@ try {
   await frame.evaluate(template=>{current={version:42,readOnly:false,content:{kind:'text',text:template}};receive(current);document.documentElement.classList.add('dark')},template)
   await page.waitForTimeout(300)
   assert.equal(await frame.evaluate(()=>Editor.isDarkMode()),true)
-  await frame.evaluate(()=>{const g=drawioUi.editor.graph;const p=g.getDefaultParent();g.model.beginUpdate();try{const a=g.insertVertex(p,'orca','Orca',100,100,150,60,'rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;');const b=g.insertVertex(p,'drawio','Draw.io 离线编辑器',370,100,180,60,'rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;');g.insertEdge(p,null,'文档同步',a,b,'edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;');}finally{g.model.endUpdate()}})
+  await frame.evaluate(()=>{const g=drawioUi.editor.graph;const p=g.getDefaultParent();g.model.beginUpdate();try{const a=g.insertVertex(p,'orca','Orca',100,100,150,60,'rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;');const b=g.insertVertex(p,'drawio','Draw.io Offline Editor',370,100,180,60,'rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;');g.insertEdge(p,null,'Document Sync',a,b,'edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;');}finally{g.model.endUpdate()}})
   await frame.evaluate(()=>flush())
   await page.screenshot({path:process.env.DRAWIO_SCREENSHOT || '/tmp/orca-drawio-tested.png'})
   assert.deepEqual(await frame.evaluate(()=>violations),[],'core editor must not violate host CSP')
